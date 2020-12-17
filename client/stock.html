@@ -1,0 +1,186 @@
+﻿<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <!-- <link rel="stylesheet" href="/css/style.css"> -->
+  <style>
+    
+      .navbar {
+        background-color: #563d7c;
+      }
+      .navbar-default .navbar-nav li a{
+        color: #eee;
+      }
+      .navbar-default .navbar-nav li a:hover{
+        color: white;
+      }
+      th, td{
+        text-align: center;
+      }
+      thead {
+        background-color: #e57373;
+        color: white;
+      }
+      #userName {
+        padding-top: 1em;
+        text-align: right;
+        color: white;
+      }
+      textarea {
+          width: 100%;
+          min-height: 30rem;
+          background-color: black;
+          font-family: "Lucida Console", Monaco, monospace;
+          font-size: 0.75 rem;
+          line-height: 1.2;
+          color: #fff;
+      }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <ul class="nav navbar-nav">
+        <li><a href="/"><b>Home</b></a></li>
+        <li><a href="/events"><b>Events</b></a></li>
+        <li><a href="/addEvent"><b>Add Event</b></a></li>
+        <li><a href="/stock"><b>Stock Page</b></a></li>
+        <li><a href="/admin"><b>Admin</b></a></li>
+        <li><a href="/logout">
+          <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
+        </a></li>
+      </ul>
+      <p id="userName">Welcome</p>
+    </div>
+  </nav>
+  <br><br>
+
+  <div class="container">
+    <div class="panel panel-default">
+      <div class="panel-body"><center>Welcome to Stock Page</center></div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <table class="table table-bordered table-hover">
+          <tbody>
+            <tr>
+              <td class="col-md-6">Company</td>
+              <td class="col-md-6">
+                <div id="form-group">
+                  <select id="Company">
+                    <option value="MSFT">Microsoft</option>
+                    <option value="BA">Boeing Company</option>
+                    <option value="AAPL">Apple Inc</option>
+                    <option value="AMZN">Amazon</option>
+                    <option value="NVDA">NVIDIA Corporation</option>
+                  </select>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <button type="button" onclick="getTimeSeriesDaily()">Get Data</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <table class="table" id="StockData">
+      <thead>
+        <tr>
+          <th scope="col">Company-MetaData</th>
+          <th scope="col">Stock-Info</th>
+        </tr>
+      </thead>
+      <tbody id=stockDisplay></tbody>
+    </table>
+  </div>
+  <style>
+
+    #metadata {
+      width: 50%;
+    }
+    #time{
+      width: 50%;
+    }
+    #metadatatext {
+      background-color: black;
+      color: white;
+      width: 100%;
+      height: 20em;
+    }
+    #timedatatext {
+      background-color: black;
+      color: white;
+      width: 100%;
+      height: 20em;
+    }
+  </style>
+  <script>
+    // TODO: Hit the TIME_SERIES_DAILY endpoint of the alphavantage API for the company that was selected in the dropdown. Display the JSON data as shown in the writeup.
+    // API key: UFOXA7JBNW4TW2V1
+    function getTimeSeriesDaily(){
+      var xmlhttp = new XMLHttpRequest();
+
+      // get drop down info
+      var dropdown = document.getElementById("Company")
+      var symbol = dropdown.options[dropdown.selectedIndex].value
+      
+
+      var url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol="+symbol+"&apikey=UFOXA7JBNW4TW2V1&datatype=json";
+      console.log(url);
+
+      xmlhttp.open("GET",url,true);
+      xmlhttp.send();
+
+      xmlhttp.onreadystatechange = function() {
+        if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
+          // console.log("got something back")
+          console.log(xmlhttp.responseText);
+          var stockData = JSON.parse(xmlhttp.responseText);
+          
+          displayStocks(stockData);
+        }
+      }
+    }
+
+    function displayStocks(stockData) {
+      var outString = ''; //initialize sting
+
+      // append info onto string
+      outString += "<tr><td id='metadata'><pre id='metadatatext'></pre></td><td id='time'><div class='scrollable'><pre id='timedatatext'></pre></div></td></tr>";
+
+      console.log(outString); 
+      var x = document.getElementById("stockDisplay");
+      x.innerHTML = outString; //display stock data to stockDisplay html
+
+      //format stringify to put in pre tag
+      document.getElementById('metadatatext').textContent = JSON.stringify(stockData["Meta Data"], null, 2);
+      document.getElementById('timedatatext').textContent = JSON.stringify(stockData["Time Series (Daily)"], null, 2);
+    }
+
+
+    $(function() {
+      console.log("function()");
+
+      $.get("userLogin").done(function(response) {
+        document.getElementById("userName").innerHTML = "Welcome " + response.login + "!";
+      });
+    });
+    
+  </script>
+
+</body>
+</html>

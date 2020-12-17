@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="crossorigin="anonymous"></script>
+    <style type="text/css">
+        .center-screen-container {
+            position: relative;
+            width:500px;
+            height:500px;
+            border: 1px solid black;
+        }
+        .header { 
+            text-align: center;
+            padding: 5em 0;
+            width: 100%;
+            height: 40%;
+            background: DarkSeaGreen;
+        }
+        .form-container{
+            text-align: center;
+            margin: 2em auto;
+            width: 100%;
+            height: 30%;
+        }
+        #error-message{
+            color: red;
+            text-align: center;
+            margin: 2em auto;
+            width: 100%;
+            height: 10%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class='center-screen-container'>
+        <div class='header'>
+            <h1> Login Page </h1>
+            <p>Please enter your user name and password. Both are case sensitive.</p>
+        </div>
+        <div class='form-container'>
+            <form id='myForm' name='myForm'>
+                <div>
+                    <label for='user'>User:</label><br>
+                    <input type='text' id='user' name='user' required>
+                </div>
+                <div>
+                    <label for='password'>Password:</label><br>
+                    <input type='type' id='password' name='password' required>
+                </div>
+                <br>
+                <input type='submit' value='Log in'>
+            </form>
+        </div>
+        <div id='error-message'></div>
+    </div>
+
+    <script type='text/javascript'>
+        // alert('hello');
+        $(document).ready(function () {
+            $('#myForm').submit(function(event) {
+                event.preventDefault();
+                //collect form data using ID selector
+                let user = $('#user').val();
+                let password = $('#password').val();
+                // console.log(user);
+                // console.log(password);
+
+                $.post('/sendLoginDetails',
+                    {
+                    'login': user,
+                    'password': password
+                    },
+                    (data) => {
+                        // console.log(data);
+                        var message = '';
+
+                    if(data === 'success') {
+                        //rediorect to events page
+                        message = 'Successful Login';
+                        $(location).attr('href', '/events');
+                    }
+                    else {
+                        message = 'Error: Invalid username and password';
+                    }
+                    $('#error-message').html(message);
+
+                    });
+            });
+        })
+    </script>
+
+
+
+</body>

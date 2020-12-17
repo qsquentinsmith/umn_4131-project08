@@ -1,0 +1,22 @@
+.navbar {
+    background-color: #563d7c;
+  }
+.navbar-default .navbar-nav li a{
+    color: #eee;
+  }
+.navbar-default .navbar-nav li a:hover{
+    color: white;
+  }
+th, td{
+    text-align: center;
+  }
+thead {
+    background-color: #e57373;
+    color: white;
+  }
+
+#userName {
+    padding-top: 1em;
+    text-align: right;
+    color: white;
+  }
