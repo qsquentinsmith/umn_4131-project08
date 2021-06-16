@@ -1,22 +1,11 @@
-CSCI 4131- Assignment 7
+# CSCI 4131- Introduction to Web Development
 
-Added admin page and functionalities.
-
-
-x500id:
-smit8819
-
-acc_login:
-quentin
-
-acc_password:
-smith
-
-To Logon to mysql:
-mysql -uC4131F20U92 -hcse-larry.cse.umn.edu -P3306 -p C4131F20U92
-
-Password: 
-8494
+Features:
+- Password required to log in. With password strength tester
+- Schedule. Add to Schedule. 
+- Map 
+- If login as admin you can add or remove stored username and passwords
+- Stock page to pull in up to date stock data for various companies.
 
 Other login passwords still in database:
 acc_login: charlie 
